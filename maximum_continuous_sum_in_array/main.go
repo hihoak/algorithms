@@ -12,21 +12,21 @@ import (
 
 func main() {
 	// maximum continuous sum in array
-	numbers := getNumbers()
+	numbers, err := getNumbers()
 
-	if len(numbers) == 0 {
+	if err != nil {
 		numbers = generaRandomArr(100, 10)
-		fmt.Println("Using random generated arr", numbers)
+		fmt.Printf("%s, Using random generated arr %v\n", err, numbers)
 	}
 
 	fmt.Printf("Result is %d", run(numbers))
 }
 
-func getNumbers() []int {
+func getNumbers() ([]int, error) {
 	reader := bufio.NewReader(os.Stdin)
 	s, err := reader.ReadString('\n')
 	if err != nil {
-		panic("Something goes wrong")
+		return nil, fmt.Errorf("something goes wrong")
 	}
 
 	numbers := make([]int, 0)
@@ -34,10 +34,10 @@ func getNumbers() []int {
 		if number, err := strconv.Atoi(strings.TrimSpace(strNumber)); err == nil {
 			numbers = append(numbers, number)
 		} else {
-			fmt.Printf("Bad integer %s\n", strNumber)
+			return nil, fmt.Errorf("bad input")
 		}
 	}
-	return numbers
+	return numbers, nil
 }
 
 func generaRandomArr(maxNumber, size int) []int {
