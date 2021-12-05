@@ -28,7 +28,7 @@ func getData() (string, string, error) {
 		return "", "", err
 	}
 	sourceString = strings.TrimRight(sourceString, "\n")
-	fmt.Printf("Input pattetn: ")
+	fmt.Printf("Input pattern: ")
 	if pattern, err = reader.ReadString('\n'); err != nil {
 		return "", "", err
 	}
@@ -55,16 +55,19 @@ func solve(data, pattern string) []int {
 	compareMap := make(map[string]int)
 	compareSize := 0
 	for i := 0; i < len(data); i++ {
-		if _, ok := patternMap[string(data[i])]; !ok {
-			compareMap = map[string]int{}
-			continue
-		}
 		if _, ok := compareMap[string(data[i])]; ok {
 			compareMap[string(data[i])]++
+		} else {
+			compareMap[string(data[i])] = 1
 		}
-		compareMap[string(data[i])] = 1
+		compareSize++
 		if compareSize > len(pattern) {
-			compareMap[string(data[i - len(pattern)])]--
+			key := string(data[i - len(pattern)])
+			compareMap[key]--
+			compareSize--
+			if compareMap[key] == 0 {
+				delete(compareMap, key)
+			}
 		}
 
 		if reflect.DeepEqual(patternMap, compareMap) {
