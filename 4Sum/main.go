@@ -7,19 +7,23 @@ func fourSum(nums []int, target int) [][]int {
 
 	res := make([][]int, 0)
 	for idx := 0; idx < len(nums)-3; idx++ {
+		// break because we can't found answer
 		if nums[idx] > target/4 {
 			break
 		}
 
 		if idx != 0 && nums[idx] == nums[idx-1] {
-			// previus result
+			// previous result
 			continue
 		}
 
+		// solving 3Sum problem here
 		for jdx := idx + 1; jdx < len(nums)-2; jdx++ {
 			if jdx != idx+1 && nums[jdx] == nums[jdx-1] {
 				continue
 			}
+
+			// solving 2Sum Problem here
 			left := jdx + 1
 			right := len(nums) - 1
 			for left < right {
